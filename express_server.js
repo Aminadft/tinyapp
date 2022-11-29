@@ -10,28 +10,26 @@ const urlDatabase = {
 
 app.use(express.urlencoded({ extended: true }));
 
-app.post("/urls", (req, res) => {
-  console.log(req.body); // Log the POST request body to the console
-  res.send("Ok"); // Respond with 'Ok' (we will replace this)
-});
-
-const characters ='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-
-function generateString(length) {
-    let result = ' ';
-    const charactersLength = characters.length;
-    for ( let i = 0; i < length; i++ ) {
-        result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-
-    return result;
+const getRandomInt = function (max) {
+  return Math.floor(Math.random() * max);
 }
 
-console.log(generateString(6));
+const generateRandomString = function(numDigits) {
+  const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+  let str = "";
+  for (let i = 0; i < numDigits; i++) {
+    str += chars[getRandomInt(chars.length)];
+  }
+  return str;
+}
+
 
 app.get("/", (req, res) => {
   res.send("Hello!");
 });
+
+
+
 app.get("/urls", (req, res) => {
   const templateVars = { urls: urlDatabase };
   res.render("urls_index", templateVars);
@@ -42,6 +40,30 @@ app.get("/urls/new", (req, res) => {
 app.get("/urls/:id", (req, res) => {
   const templateVars = { id: req.params.id, longURL: urlDatabase[req.params.id]};
   res.render("urls_show", templateVars);
+});
+
+// url addition 
+app.post("/urls", (req, res) => {
+  const shortUrl = generateRandomString();
+  const longUrl = req.body["longURL"];
+  urlDatabase[shortUrl] = longUrl;
+  res.redirect(`/urls/${shortUrl}/n`);
+});
+
+
+//redirect "/u/:id" to its longURL
+app.get("/u/:id", (req, res) => {
+  const shortUrl = req.params.id;
+  const longUrl = urlDatabase[shortUrl];
+  
+  (longUrl);
+});
+
+//delete
+app.get("/urls/:id", (req, res) => {
+  const shortUrl = req.params.id;
+  delete urlDatabase[shortUrl];
+  res.redirect(`/urls`);
 });
 
 app.listen(PORT, () => {
