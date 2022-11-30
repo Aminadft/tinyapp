@@ -1,6 +1,12 @@
 const express = require("express");
 const app = express();
 const PORT = 8080; // default port 8080
+const cookieParser = require("cookie-parser");
+const shortenUrl = require("./helpers/shortenUrl");
+const morgan = require("morgan");
+
+
+
 
 app.set("view engine", "ejs");
 const urlDatabase = {
@@ -41,6 +47,11 @@ app.get("/urls/:id", (req, res) => {
   const templateVars = { id: req.params.id, longURL: urlDatabase[req.params.id]};
   res.render("urls_show", templateVars);
 });
+//get addition for edit 
+app.get("/urls/:id/edit", (req, res) => {
+  const templateVars = { id: req.params.id, longURL: urlDatabase[req.params.id]};
+  res.render("urls_edit", templateVars);
+});
 
 // url addition 
 app.post("/urls", (req, res) => {
@@ -51,6 +62,21 @@ app.post("/urls", (req, res) => {
 });
 
 
+// url addition for edit
+app.post("/urls/:id/edit", (req, res) => { //edit post all lowercase
+  const longUrl = req.body.longURL
+  const shortUrl = req.body.shortUrl
+  urlDatabase[shortUrl] = longUrl;
+  res.redirect(`/urls/${shortUrl}`);
+});
+//login request
+app.post('/login', (req, res) => {
+
+  const username = req.body.username;
+  res.cookie('username', username);
+
+  res.redirect('/urls');
+});
 //redirect "/u/:id" to its longURL
 app.get("/u/:id", (req, res) => {
   const shortUrl = req.params.id;

@@ -17,7 +17,8 @@
       <h3>My URLs</h3>
       <table class="table">
         <thead>
-          <tr>
+        <title>EDIT</title>
+            <tr>
             <th scope="col">Short URL ID</th>
             <th scope="col">Long URL</th>
           </tr>
@@ -35,6 +36,11 @@
                 <form method="POST" action="/urls/9sm5xK/delete">
                   <button type="DELETE">DELETE</button> 
                 </form>
+                <td>
+                  <form method="POST" action="/urls/9sm5xK/edit">
+                    <button type="EDIT">EDIT</button> 
+                  </form>
+                </td>
               </td>
             </tr>
             <% } %>
