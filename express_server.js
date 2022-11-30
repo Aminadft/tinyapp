@@ -5,8 +5,6 @@ const cookieParser = require("cookie-parser");
 
 
 
-
-
 app.set("view engine", "ejs");
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
@@ -15,6 +13,7 @@ const urlDatabase = {
 
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
 
 const getRandomInt = function (max) {
   return Math.floor(Math.random() * max);
@@ -29,12 +28,10 @@ const generateRandomString = function(numDigits) {
   return str;
 }
 
-
+//Get 
 app.get("/", (req, res) => {
   res.send("Hello!");
 });
-
-
 
 app.get("/urls", (req, res) => {
   const templateVars = { urls: urlDatabase, username: req.cookies["username"],
