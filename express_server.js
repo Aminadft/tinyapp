@@ -19,7 +19,7 @@ const generateRandomString = function(numDigits) {
   let str = "";
   for (let i = 0; i < numDigits; i++) {
     str += chars[getRandomInt(chars.length)];
-  }
+  } 
   return str;
 }
 
